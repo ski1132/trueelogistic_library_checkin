@@ -114,9 +114,10 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
             activity?.supportFragmentManager?.popBackStack()
         }
     }
-
+    var waitForResponse = true
     override fun onClickItem(dataModel: GenerateItemHubModel) {
-        if (nearByDialog?.isAdded == false) {
+        if (nearByDialog?.isAdded == false && waitForResponse ) {
+            waitForResponse = false
             nearByDialog?.item = dataModel
             CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
                 override fun onResponse(type: String?, today: Boolean) {
@@ -131,6 +132,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                     nearByDialog?.checkinType = "NEARBY"
                     nearByDialog?.typeFromLastCheckIn = newType
                     nearByDialog?.show(activity?.supportFragmentManager, "show")
+                    waitForResponse = true
                 }
 
                 override fun onFailure(message: String?) {
@@ -147,8 +149,8 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                         CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
                         Activity.RESULT_OK, intent
                     )
+                    waitForResponse = true
                 }
-
             })
         }
     }

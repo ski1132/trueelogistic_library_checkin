@@ -69,9 +69,10 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
         adapter.items.add(value)
         adapter.notifyItemInserted(insertIndex)
     }
-
+    var waitForResponse = true
     override fun onClickItem(dataModel: GenerateItemHubModel) {
-        if (shakeDialog?.isAdded == false) {
+        if (shakeDialog?.isAdded == false && waitForResponse ) {
+            waitForResponse = false
             shakeDialog?.item = dataModel
             CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
                 override fun onResponse(type: String?, today: Boolean) {
@@ -86,6 +87,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
                     shakeDialog?.checkinType = "SHAKE"
                     shakeDialog?.typeFromLastCheckIn = newType
                     shakeDialog?.show(activity?.supportFragmentManager, "show")
+                    waitForResponse
                 }
 
                 override fun onFailure(message: String?) {
@@ -102,8 +104,8 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
                         CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
                         Activity.RESULT_OK, intent
                     )
+                    waitForResponse
                 }
-
             })
         }
     }
