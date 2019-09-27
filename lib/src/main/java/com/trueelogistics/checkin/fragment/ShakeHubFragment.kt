@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_shake_hub.*
 class ShakeHubFragment : Fragment(), OnClickItemCallback {
 
     private var adapter = GenerateHubAdapter(this)
-
+    private var shakeDialog: CheckInDialogFragment? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,38 +71,41 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
     }
 
     override fun onClickItem(dataModel: GenerateItemHubModel) {
-        val shakeDialog = CheckInDialogFragment()
-        shakeDialog.item = dataModel
-        CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String?, today: Boolean) {
-                val newType = when (type) {
-                    CheckInTELType.CheckOut.value ,CheckInTELType.CheckOutOverTime.value -> {
-                        CheckInTELType.CheckIn.value
+        if (shakeDialog?.isAdded == false) {
+            shakeDialog?.item = dataModel
+            CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
+                override fun onResponse(type: String?, today: Boolean) {
+                    val newType = when (type) {
+                        CheckInTELType.CheckOut.value, CheckInTELType.CheckOutOverTime.value -> {
+                            CheckInTELType.CheckIn.value
+                        }
+                        else -> {
+                            CheckInTELType.CheckBetween.value
+                        }
                     }
-                    else -> {
-                        CheckInTELType.CheckBetween.value
-                    }
+                    shakeDialog?.checkinType = "SHAKE"
+                    shakeDialog?.typeFromLastCheckIn = newType
+                    shakeDialog?.show(activity?.supportFragmentManager, "show")
                 }
-                shakeDialog.checkinType = "SHAKE"
-                shakeDialog.typeFromLastCheckIn = newType
-                shakeDialog.show(activity?.supportFragmentManager, "show")
-            }
 
-            override fun onFailure(message: String?) {
-                val intent = Intent(activity, CheckInTEL::class.java)
-                intent.putExtras(
-                    Bundle().apply {
-                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , " getLastCheck.onFail : $message ")
-                    }
-                )
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                    Activity.RESULT_OK, intent
-                )
-            }
+                override fun onFailure(message: String?) {
+                    val intent = Intent(activity, CheckInTEL::class.java)
+                    intent.putExtras(
+                        Bundle().apply {
+                            putString(
+                                CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                , " getLastCheck.onFail : $message "
+                            )
+                        }
+                    )
+                    CheckInTEL.checkInTEL?.onActivityResult(
+                        CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                        Activity.RESULT_OK, intent
+                    )
+                }
 
-        })
+            })
+        }
     }
 }
 

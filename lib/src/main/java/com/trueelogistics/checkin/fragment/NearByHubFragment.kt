@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 
 class NearByHubFragment : Fragment(), OnClickItemCallback {
     private var adapter = GenerateHubAdapter(this)
-    private var nearByDialog: CheckInDialogFragment? = null //
+    private var nearByDialog: CheckInDialogFragment? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
