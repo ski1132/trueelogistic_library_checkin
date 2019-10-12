@@ -33,6 +33,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        shakeDialog = CheckInDialogFragment()
         back_page.setOnClickListener {
             activity?.onBackPressed()
         }
