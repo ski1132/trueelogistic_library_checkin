@@ -92,12 +92,6 @@ class ScanQrFragment : Fragment() {
         back_page.setOnClickListener {
             activity?.onBackPressed()
         }
-        self_checkin.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()?.replace(
-                R.id.fragment,
-                ManualCheckInFragment.newInstance(arguments?.getString(TYPE_KEY).toString())
-            )?.addToBackStack(ManualCheckInFragment::class.java.name)?.commit()
-        }
     }
 
     private fun setDisableBackPage() {
