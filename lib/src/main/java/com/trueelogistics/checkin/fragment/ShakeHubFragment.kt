@@ -88,7 +88,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
                     shakeDialog?.checkinType = "SHAKE"
                     shakeDialog?.typeFromLastCheckIn = newType
                     shakeDialog?.show(activity?.supportFragmentManager, "show")
-                    waitForResponse
+                    waitForResponse = true
                 }
 
                 override fun onFailure(message: String?) {
@@ -105,7 +105,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
                         CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
                         Activity.RESULT_OK, intent
                     )
-                    waitForResponse
+                    waitForResponse = true
                 }
             })
         }

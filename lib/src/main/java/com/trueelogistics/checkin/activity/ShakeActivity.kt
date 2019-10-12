@@ -19,7 +19,6 @@ import com.trueelogistics.checkin.model.HubInDataModel
 
 class ShakeActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shake)

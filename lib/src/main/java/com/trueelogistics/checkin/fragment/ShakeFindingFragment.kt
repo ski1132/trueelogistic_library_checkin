@@ -1,7 +1,5 @@
 package com.trueelogistics.checkin.fragment
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,15 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.activity.ShakeActivity
-import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.fragment_shake_finding.*
 
 class ShakeFindingFragment : Fragment() {
 
     private var shakeAnimation: AnimationDrawable? = null
-    companion object{
+
+    companion object {
         var showView = true
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +33,21 @@ class ShakeFindingFragment : Fragment() {
             activity?.onBackPressed()
         }
         nearByAnimation()
+        fineHub()
+    }
+
+    override fun onResume() {
+        fineHub()
+        super.onResume()
+    }
+
+    private fun nearByAnimation() {
+        loading_hub_shake.setBackgroundResource(R.drawable.nearby_finding)
+        shakeAnimation = loading_hub_shake.background as AnimationDrawable
+        shakeAnimation?.start()
+    }
+
+    private fun fineHub(){
         activity?.let {
             ShakeActivity().itemShake(it, object : ShakeActivity.ShakeCallback {
                 override fun onFound(hubId: String?, hubName: String?) {
@@ -48,12 +62,5 @@ class ShakeFindingFragment : Fragment() {
 
             })
         }
-    }
-
-
-    private fun nearByAnimation() {
-        loading_hub_shake.setBackgroundResource(R.drawable.nearby_finding)
-        shakeAnimation = loading_hub_shake.background as AnimationDrawable
-        shakeAnimation?.start()
     }
 }
